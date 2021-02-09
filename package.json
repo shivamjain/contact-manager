@@ -4,12 +4,12 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start:node:development": "NODE_ENV=development node app.js",
-    "start:node:staging": "NODE_ENV=staging node app.js",
-    "start:node:production": "NODE_ENV=production node app.js",
-    "start:nodemon:development": "NODE_ENV=development nodemon app.js",
+    "start:node:development": "set NODE_ENV=development&& node app.js",
+    "start:node:staging": "set NODE_ENV=staging&& node app.js",
+    "start:node:production": "set NODE_ENV=production&& node app.js",
+    "start:nodemon:development": "set NODE_ENV=development&& nodemon app.js",
     "start:nodemon:staging": "NODE_ENV=staging nodemon app.js",
-    "start:nodemon:production": "NODE_ENV=production nodemon app.js"
+    "start:nodemon:production": "set NODE_ENV=production&& nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "express": "^4.17.1",
     "lodash": "^4.17.20",
     "mongoose": "^5.11.15",
-    "mongoose-bcrypt": "^1.9.0"
+    "mongoose-bcrypt": "^1.9.0",
+    "nodemon": "^2.0.7"
   }
 }
