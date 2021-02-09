@@ -9,6 +9,9 @@ const routes = require("./src/routes");
 _.each(routes, (value, key) => {
 	app.use(value);
 });
+// for(const n in routes){
+// 	app.use(routes[n]);
+// }
 
 app.listen(config.app.port, () => {
 	console.log(`[INFO] Application started on port: ${config.app.port}`);
