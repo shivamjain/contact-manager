@@ -1,5 +1,14 @@
 {
 	"app": {
 		"port": ""
+	},
+	"database": {
+		"mongodb": {
+			"db": "",
+			"host": "",
+			"user": "",
+			"pass": "",
+			"options": ""
+		}
 	}
 }

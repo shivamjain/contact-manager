@@ -14,10 +14,10 @@ let schema = new Schema({
         maxlength: 50
     },
     status: {
-		type: String,
-		enum: STATUS_ENUM,
-		default: STATUS_PENDING
-	}
+        type: String,
+        enum: STATUS_ENUM,
+        default: STATUS_PENDING
+    }
 }, _.merge({ collection: "organizations" }, option));
 
 module.exports = schema;
