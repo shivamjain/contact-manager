@@ -1,12 +1,14 @@
 const express = require("express");
 let router = express.Router();
 
+const Registry = require("../misc/registry");
+
 router.get("/status", (req, res, next) => {
-    res.json({ status: true });
+    res.json({ status: true, Environment: Registry.get("env") });
 });
 
 router.post("/auth/login", (req, res, next) => {
-
+    
 });
 
 router.post("/auth/register", (req, res, next) => {

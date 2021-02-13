@@ -3,5 +3,6 @@ module.exports = {
 		createdAt: "created",
 		updatedAt: "modified"
 	},
+	autoCreate: true,
 	versionKey: false
 }
