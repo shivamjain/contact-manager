@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const express = require("express");
+const expressHbs = require("express-handlebars");
 let app = express();
 
 process.env.NODE_ENV = process.env.NODE_ENV || "development";
@@ -22,6 +23,14 @@ _.each(schemas, (value, key) => {
 Registry.set("models", models);
 Registry.set("config", config);
 Registry.set("env", process.env.NODE_ENV);
+
+// Attaching middleware's
+app.engine("hbs", expressHbs({
+	extname: "hbs",
+	layoutsDir: "src/views/layouts",
+	defaultLayout: "standard"
+}));
+app.set('view engine', 'hbs');
 
 const routes = require("./src/routes");
 _.each(routes, (value, key) => {
