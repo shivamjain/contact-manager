@@ -6,7 +6,10 @@ const STATUS_ACTIVE = "active", STATUS_PENDING = "pending", STATUS_DISABLED = "d
 const STATUS_ENUM = [ STATUS_ACTIVE, STATUS_PENDING, STATUS_DISABLED, STATUS_DELETED ];
 
 let schema = new Schema({
-    _id: Schema.ObjectId,
+    _id: {
+        type: Schema.ObjectId,
+        required: true
+    },
     name: {
         type: String,
         required: true,
@@ -19,5 +22,10 @@ let schema = new Schema({
         default: STATUS_PENDING
     }
 }, _.merge({ collection: "organizations" }, option));
+
+schema.statics.STATUS_ACTIVE = STATUS_ACTIVE;
+schema.statics.STATUS_PENDING = STATUS_PENDING;
+schema.statics.STATUS_DISABLED = STATUS_DISABLED;
+schema.statics.STATUS_DELETED = STATUS_DELETED;
 
 module.exports = schema;

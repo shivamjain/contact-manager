@@ -23,14 +23,22 @@ _.each(schemas, (value, key) => {
 Registry.set("models", models);
 Registry.set("config", config);
 Registry.set("env", process.env.NODE_ENV);
+Registry.set("__dirname", __dirname);
+
+console.log(Registry.get("__dirname"));
 
 // Attaching middleware's
 app.engine("hbs", expressHbs({
 	extname: "hbs",
-	layoutsDir: "src/views/layouts",
+	layoutsDir: Registry.get("__dirname") + "/src/views/layouts",
+	partialsDir: Registry.get("__dirname") + "/src/views",
 	defaultLayout: "standard"
 }));
+app.set('views', Registry.get("__dirname") + "/src/views");
 app.set('view engine', 'hbs');
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 const routes = require("./src/routes");
 _.each(routes, (value, key) => {

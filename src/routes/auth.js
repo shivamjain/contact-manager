@@ -8,12 +8,18 @@ router.get("/status", (req, res) => {
 	res.json({ status: true, Environment: Registry.get("env") });
 });
 
-router.get("/auth/login", async (req, res) => {
+router.route("/auth/login").get(async (req, res) => {
+	let ctr = new Controller.Auth(req, res);
+	await ctr.executeMethod("login");
+}).post(async (req, res) => {
 	let ctr = new Controller.Auth(req, res);
 	await ctr.executeMethod("login");
 });
 
-router.post("/auth/register", async (req, res) => {
+router.route("/auth/register").get(async (req, res) => {
+	let ctr = new Controller.Auth(req, res);
+	await ctr.executeMethod("register");
+}).post(async (req, res) => {
 	let ctr = new Controller.Auth(req, res);
 	await ctr.executeMethod("register");
 });

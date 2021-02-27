@@ -1,11 +1,16 @@
 // External Deps
 const _ = require("lodash");
 const Promise = require("bluebird");
+const Registry = require("../misc/registry");
 
 class Base {
 	constructor(req, res) {
 		this.req = req;
 		this.res = res;
+
+		this.models = Registry.get("models");
+		this.config = Registry.get("config");
+		this.env = Registry.get("env");
 
 		this.beforeMethods = {};
 		this.afterMethods = {};
@@ -35,7 +40,7 @@ class Base {
 			await this[name](...args);
 			await this.__executeAfter(name);
 		} catch (error) {
-			
+			console.log(error);
 		}
 	}
 }
