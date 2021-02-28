@@ -17,10 +17,10 @@ class Base {
 	}
 
 	async __executeBefore(name) {
-		if (_.size(this.beforeMethods) == 0 || !this._beforeMethods[name] || _.size(this.beforeMethods[name]) == 0) {
+		if (_.size(this.beforeMethods) == 0 || !this.beforeMethods[name] || _.size(this.beforeMethods[name]) == 0) {
 			return;
 		}
-		await Promise.each(this._beforeMethods[name], async (m) => {
+		await Promise.each(this.beforeMethods[name], async (m) => {
 			await this[m]();
 		});
 	}
