@@ -19,7 +19,7 @@
 		<div class="form-group">
 			<label for="exampleInputname">Company name</label>
 			<input type="text" class="form-control" name="companyName" id="exampleInputname"
-				aria-describedby="emailHelp" required>
+				aria-describedby="emailHelp" required {{#if error}}value={{data.companyName}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="exampleInputname">Full name</label>
