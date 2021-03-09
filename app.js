@@ -25,8 +25,6 @@ Registry.set("config", config);
 Registry.set("env", process.env.NODE_ENV);
 Registry.set("__dirname", __dirname);
 
-console.log(Registry.get("__dirname"));
-
 // Attaching middleware's
 app.engine("hbs", expressHbs({
 	extname: "hbs",
