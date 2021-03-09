@@ -22,7 +22,7 @@ class Auth extends Base {
 			} else {
 				// Cookie set and redirect to dashboard page
 				let user = await this.models.User.findOne({ email: value.email });
-				if (user && user.verifyPassword(value.password)) {
+				if (user && await user.verifyPassword(value.password)) {
 					// redirect
 					console.log("user found");
 				} else {
