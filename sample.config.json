@@ -1,6 +1,7 @@
 {
 	"app": {
-		"port": ""
+		"port": "",
+		"secret": ""
 	},
 	"database": {
 		"mongodb": {

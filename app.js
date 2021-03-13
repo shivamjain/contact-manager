@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const cookieParser = require('cookie-parser');
 const express = require("express");
 const expressHbs = require("express-handlebars");
 let app = express();
@@ -37,6 +38,7 @@ app.set('view engine', 'hbs');
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser());
 
 const routes = require("./src/routes");
 _.each(routes, (value, key) => {

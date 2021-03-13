@@ -1,4 +1,5 @@
 module.exports = {
     Auth: require("./auth"),
-    Contact: require("./contact")
+    Contact: require("./contact"),
+    Admin: require("./admin")
 };

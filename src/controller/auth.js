@@ -1,5 +1,6 @@
 // External Deps
 const _ = require("lodash");
+const jwt = require("jsonwebtoken");
 
 // Internal Deps
 const Base = require("./base");
@@ -9,7 +10,45 @@ const Util = require("../misc/util");
 class Auth extends Base {
 	constructor(req, res) {
 		super(req, res);
+		this.user = null;
+		this.org = null;
+		
 		this.beforeMethods = {};
+	}
+
+	__getPayload() {
+		let payload = null;
+		try {
+			let token = this.req.cookies.hasOwnProperty("_token") ? this.req.cookies["_token"] : null;
+			if (!token) {
+				throw new Error("Token not found");
+			}
+			payload = jwt.verify(token, this.config.app.secret);
+		} catch (error) {
+
+		}
+		return payload;
+	}
+
+	async _secure() {
+		let payload = this.__getPayload();
+		if (!payload) {
+			this.res.redirect("/auth/login");
+		}
+		console.log(payload);
+		let user = await this.models.User.findOne({_id: payload.uid});
+		let org = await this.models.Organization.findOne({_id: payload.oid});
+		if (!user || !org) {
+			this.res.redirect("/auth/login");
+		}
+		this.user = user;
+		this.org = org;
+	}
+
+	__generateToken(org, user, seconds = 3600) {
+		let payload = { uid: user._id, oid: org._id };
+		let options = { expiresIn: seconds };
+		return jwt.sign(payload, this.config.app.secret, options);
 	}
 
 	async login() {
@@ -20,13 +59,29 @@ class Auth extends Base {
 			if (error) {
 				errorMsg = _.size(error.details) > 0 ? error.details[0].message : null;
 			} else {
-				// Cookie set and redirect to dashboard page
-				let user = await this.models.User.findOne({ email: value.email });
-				if (user && await user.verifyPassword(value.password)) {
-					// redirect
-					console.log("user found");
-				} else {
-					errorMsg = "Incorrect email/password";
+				try {
+					let user = await this.models.User.findOne({ email: value.email });
+					if (!user || !await user.verifyPassword(value.password)) {
+						throw new Error("Incorrect email/password");
+					}
+					let org = await this.models.Organization.findOne({ _id: user.orgId });
+					if (!org) {
+						throw new Error("Incorrect email/password");
+					}
+					if (org.status != this.models.Organization.STATUS_ACTIVE || user.status != this.models.User.STATUS_ACTIVE) {
+						throw new Error("Account not active");
+					}
+					let seconds = 3600;
+					let token = this.__generateToken(org, user, seconds);
+					this.res.cookie("_token", token, {
+						maxAge: seconds * 1000,
+						secure: false,
+						httpOnly: true,
+						sameSite: "strict"
+					});
+					this.res.redirect("/");
+				} catch (error) {
+					errorMsg = error.message;
 				}
 			}
 		}
