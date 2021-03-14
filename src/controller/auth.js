@@ -7,19 +7,24 @@ const Base = require("./base");
 const Validation = require("../validations");
 const Util = require("../misc/util");
 
+const COOKIE_NAME = "_token";
+
 class Auth extends Base {
 	constructor(req, res) {
 		super(req, res);
 		this.user = null;
 		this.org = null;
 		
-		this.beforeMethods = {};
+		this.beforeMethods = {
+			"login": ["_isAlreadyLoggedIn"],
+			"register": ["_isAlreadyLoggedIn"]
+		};
 	}
 
 	__getPayload() {
 		let payload = null;
 		try {
-			let token = this.req.cookies.hasOwnProperty("_token") ? this.req.cookies["_token"] : null;
+			let token = this.req.cookies.hasOwnProperty(COOKIE_NAME) ? this.req.cookies[COOKIE_NAME] : null;
 			if (!token) {
 				throw new Error("Token not found");
 			}
@@ -30,16 +35,22 @@ class Auth extends Base {
 		return payload;
 	}
 
+	async _isAlreadyLoggedIn() {
+		let payload = this.__getPayload();
+		if (payload) {
+			this.res.redirect("/");
+		}
+	}
+
 	async _secure() {
 		let payload = this.__getPayload();
-		if (!payload) {
-			this.res.redirect("/auth/login");
+		if (_.size(payload) == 0) {
+			this.res.redirect("/login");
 		}
-		console.log(payload);
 		let user = await this.models.User.findOne({_id: payload.uid});
 		let org = await this.models.Organization.findOne({_id: payload.oid});
 		if (!user || !org) {
-			this.res.redirect("/auth/login");
+			this.res.redirect("/login");
 		}
 		this.user = user;
 		this.org = org;
@@ -138,6 +149,11 @@ class Auth extends Base {
 			success: successMsg,
 			data: this.req.body
 		});
+	}
+
+	async logout() {
+		this.res.clearCookie(COOKIE_NAME);
+		this.res.redirect("/login");
 	}
 }
 

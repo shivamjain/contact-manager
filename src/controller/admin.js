@@ -11,7 +11,16 @@ class Admin extends Auth {
     }
 
     async dashboard() {
-        this.res.json({ message: "You are logged in as " + this.user.email });
+        let title = "Welcome to Dashboard", errorMsg = "", successMsg = "";
+        
+        this.res.render("admin/dashboard", {
+			layout: "admin",
+			title,
+			error: errorMsg,
+			success: successMsg,
+            user: this.user.toJSON(),
+            org: this.org.toJSON()
+		});
     }
 }
 

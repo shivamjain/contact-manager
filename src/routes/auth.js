@@ -8,7 +8,7 @@ router.get("/status", (req, res) => {
 	res.json({ status: true, Environment: Registry.get("env") });
 });
 
-router.route("/auth/login").get(async (req, res) => {
+router.route("/login").get(async (req, res) => {
 	let ctr = new Controller.Auth(req, res);
 	await ctr.executeMethod("login");
 }).post(async (req, res) => {
@@ -16,7 +16,7 @@ router.route("/auth/login").get(async (req, res) => {
 	await ctr.executeMethod("login");
 });
 
-router.route("/auth/register").get(async (req, res) => {
+router.route("/register").get(async (req, res) => {
 	let ctr = new Controller.Auth(req, res);
 	await ctr.executeMethod("register");
 }).post(async (req, res) => {
@@ -24,8 +24,9 @@ router.route("/auth/register").get(async (req, res) => {
 	await ctr.executeMethod("register");
 });
 
-router.get("/auth/logout", (req, res) => {
-
+router.route("/logout").get(async (req, res) => {
+	let ctr = new Controller.Auth(req, res);
+	await ctr.executeMethod("logout");
 });
 
 module.exports = router;
